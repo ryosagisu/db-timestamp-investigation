@@ -1,0 +1,51 @@
+version: '3.1'
+
+services:
+  mysql_jakarta:
+    container_name: myid
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      TZ: Asia/Jakarta
+    volumes:
+      - ./db_init/mysql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mysql_singapore:
+    container_name: mysg
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      TZ: Asia/Singapore
+    volumes:
+      - ./db_init/mysql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  postgres_jakarta:
+    container_name: pgid
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      TZ: Asia/Jakarta
+    volumes:
+      - ./db_init/postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  postgres_singapore:
+    container_name: pgsg
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      TZ: Asia/Singapore
+    volumes:
+      - ./db_init/postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  spark-master:
+    container_name: spark
+    image: bitnami/spark
+    environment:
+      TZ: UTC
+    volumes:
+      - ./spark_additional_jars:/spark_additional_jars
+      - ./spark_scripts:/spark_scripts
