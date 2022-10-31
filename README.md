@@ -1,13 +1,18 @@
 # db-timestamp-investigation
 observing timestamp behavior in mysql and postgresql
 
-table only contain single row in timestamp with timezone and timestamp without timezone
-`'2022-01-01 12:00:00', '2022-01-01 13:00:00'`
-third columns will indicate current timestamp
-and only first column value should be changed to UTC
+table contain single row with following information
 
-Database timezone is in Jakarta and Singapore
-Spark is in UTC
+| desc             | value                   | postgresql type                             | mysql type   |
+| ---------------- | ----------------------- | ------------------------------------------- | ------------ |
+| with timezone    | `'2022-01-01 12:00:00'` | `timestamptz` or `timestamp with timezone`  | `timestamp`  |
+| without timezone | `'2022-01-01 13:00:00'` | `timestamp` or `timestamp without timezone` | `datetime`   |
+
+third columns will indicate current timestamp
+
+only timestamp with timezone information will be converted to UTC
+
+Database timezone is in Jakarta and Singapore, and Spark is in UTC
 
 run makefile to operate
 ```bash
