@@ -19,13 +19,20 @@ run makefile to operate
 # start all container
 make start
 
-# query mysql table
-make query-mysql
+# run spark to query mysql table
+make query_mysql_tz_behavior
 
-# query postgresql table
-make query-postgresql
+# run spark to query psql table
+make query_psql_tz_behavior
+
+# show content of mysql table
+make query_mysql_ts_behavior
+
+# show content of psql table
+make query_psql_ts_behavior
 
 # cleanup container
 make stop
 
 ```
+
