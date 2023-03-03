@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.9'
 
 services:
   mysql_jakarta:
@@ -10,6 +10,10 @@ services:
       TZ: Asia/Jakarta
     volumes:
       - ./db_init/mysql.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      retries: 5
 
   mysql_singapore:
     container_name: mysg
@@ -20,6 +24,10 @@ services:
       TZ: Asia/Singapore
     volumes:
       - ./db_init/mysql.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      retries: 5
 
   postgres_jakarta:
     container_name: pgid
@@ -30,6 +38,10 @@ services:
       TZ: Asia/Jakarta
     volumes:
       - ./db_init/postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
 
   postgres_singapore:
     container_name: pgsg
@@ -40,10 +52,23 @@ services:
       TZ: Asia/Singapore
     volumes:
       - ./db_init/postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
 
   spark-master:
     container_name: spark
     image: bitnami/spark
+    depends_on:
+      mysql_jakarta:
+        condition: service_healthy
+      mysql_singapore:
+        condition: service_healthy
+      postgres_jakarta:
+        condition: service_healthy
+      postgres_singapore:
+        condition: service_healthy
     environment:
       TZ: UTC
     volumes:
